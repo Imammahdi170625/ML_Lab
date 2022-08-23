@@ -25,11 +25,22 @@ three = np.array([[1, 1, 1, 1, 0],
                   [0, 1, 1, 1, 0],
                   [0, 0, 0, 0, 1],
                   [1, 1, 1, 1, 0]])
-X = np.array([one, two, three])
+four = np.array([[0, 0, 0, 1, 0],
+                 [0, 0, 1, 1, 0],
+                 [0, 1, 0, 1, 0],
+                 [1, 1, 1, 1, 1],
+                 [0, 0, 0, 1, 0]])
+five = np.array([[1, 1, 1, 1, 1],
+                 [1, 0, 0, 0, 0],
+                 [1, 1, 1, 1, 0],
+                 [0, 0, 0, 0, 1],
+                 [1, 1, 1, 1, 0]])
+X = np.array([one, two, three, four, five])
 D = np.array([[1, 0, 0, 0, 0],
               [0, 1, 0, 0, 0],
               [0, 0, 1, 0, 0],
-              ])
+              [0, 0, 0, 1, 0],
+              [0, 0, 0, 0, 1]])
 assert X.shape[0] == D.shape[0], "Your are Fucked up!!"
 
 W1 = np.random.rand(50, 25)
@@ -62,6 +73,6 @@ for j, val in enumerate(D):
     v1 = np.dot(W1, x)
     y1 = sigmoid(v1)
     v = np.dot(W2, y1)
-    y = np.round(softmax(v)).transpose()[0]
-    print(y)
+    y = np.round(softmax(v))
+    print(np.transpose(y))
     print()

@@ -1,35 +1,78 @@
 import numpy as np
 
 
-def sigmid(z):
+def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-X = np.array([[0, 0, 1],
-              [0, 1, 1],
-              [1, 0, 1],
-              [1, 1, 1]])
-D = np.array([[0],
-              [0],
-              [1],
-              [1],])
-W = np.random.rand(1,3)
-alpha = .9
-for i in range(1000):
-    for j in range(D.shape[0]):
-        x = np.reshape(X[j], (3, 1))
-        d = D[j, :]
-        v = np.dot(W, x)
-        y = sigmid(v)
-        e = d - y
-        delta = y * (1 - y) * e
-        dW = alpha * delta * x
-        # print(np.reshape(dW,(1,3)))
-        # W = W + np.reshape(dW,(1,3))
-        W = W + np.transpose(dW)
+def softmax(x):
+    return np.exp(x) / np.sum(np.exp(x))
 
-for i in range(D.shape[0]):
-    x = np.reshape(X[i],(3,1))
-    v = np.dot(W,x)
-    y = sigmid(v)
-    print(y)
+
+one = np.array([[0, 1, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 1, 1, 1, 0]])
+two = np.array([[1, 1, 1, 1, 0],
+                [0, 0, 0, 0, 1],
+                [0, 1, 1, 1, 0],
+                [1, 0, 0, 0, 0],
+                [1, 1, 1, 1, 1]
+                ])
+three = np.array([[1, 1, 1, 1, 0],
+                  [0, 0, 0, 0, 1],
+                  [0, 1, 1, 1, 0],
+                  [0, 0, 0, 0, 1],
+                  [1, 1, 1, 1, 0]])
+four = np.array([[0, 0, 0, 1, 0],
+                 [0, 0, 1, 1, 0],
+                 [0, 1, 0, 1, 0],
+                 [1, 1, 1, 1, 1],
+                 [0, 0, 0, 1, 0]])
+five = np.array([[1, 1, 1, 1, 1],
+                 [1, 0, 0, 0, 0],
+                 [1, 1, 1, 1, 0],
+                 [0, 0, 0, 0, 1],
+                 [1, 1, 1, 1, 0]])
+X = np.array([one, two, three, four, five])
+D = np.array([[1, 0, 0, 0, 0],
+              [0, 1, 0, 0, 0],
+              [0, 0, 1, 0, 0],
+              [0, 0, 0, 1, 0],
+              [0, 0, 0, 0, 1]])
+assert X.shape[0] == D.shape[0], "Your are Fucked up!!"
+
+W1 = np.random.rand(50, 25)
+W2 = np.random.rand(5, 50)
+ALPHA = 0.9
+epchos = 100
+# print(D)
+for i in range(epchos+1):
+    for j, val in enumerate(D):
+        x = np.reshape(X[j], (25, 1))
+        d = np.reshape(val, (5, 1))
+        v1 = np.dot(W1, x)
+        y1 = sigmoid(v1)
+        v = np.dot(W2, y1)
+        y = softmax(v)
+
+        e = d - y
+        delta = e
+        e1 = np.dot(np.transpose(W2), delta)
+        delta1 = y1 * (1 - y1) * e1
+        dW1 = ALPHA * delta1 * np.transpose(x)
+        W1 = W1 + dW1
+        dW2 = ALPHA * delta * np.transpose(y1)
+        W2 = W2 + dW2
+
+# prediction Stage
+
+for j, val in enumerate(D):
+    x = np.reshape(X[j], (25, 1))
+    v1 = np.dot(W1, x)
+    y1 = sigmoid(v1)
+    v = np.dot(W2, y1)
+    y = np.round(softmax(v))
+    print(np.transpose(y))
+    print()

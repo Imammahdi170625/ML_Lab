@@ -45,6 +45,7 @@ for i in range(epchos+1):
         y1 = sigmoid(v1)
         v = np.dot(W2, y1)
         y = softmax(v)
+
         e = d - y
         delta = e
         e1 = np.dot(np.transpose(W2), delta)

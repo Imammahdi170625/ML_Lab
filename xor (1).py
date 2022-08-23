@@ -13,7 +13,7 @@ D = np.array([[0, 1, 1, 0]])
 W1 = np.random.rand(4, 3)
 W2 = np.random.rand(1, 4)
 ALPHA = 0.9
-print(D.shape)
+# print(D.shape)
 for i in range(10000):
     for j in range(D.shape[1]):
         x = np.reshape(X[j], (3, 1))

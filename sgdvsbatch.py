@@ -60,13 +60,17 @@ for i in range(epoch):
         v2 = np.dot(W2, x)
         y2 = sigmoid(v2)
         es2 = es2 + np.square(d - y2)
-
     E1[i] = es1 / N
     E2[i] = es2 / N
+    if i!=0 and i%100==0:
+        print(E1[i][0])
+        print(E2[i][0])
+
+
 
 plt.plot(E1, 'r')
 plt.plot(E2, 'b:')
 plt.xlabel('Epoch')
 plt.ylabel('Average of Training error')
-plt.legend('SGD', 'Batch')
+# plt.legend('SGD', 'Batch')
 plt.show()
